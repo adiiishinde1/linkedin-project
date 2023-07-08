@@ -1,0 +1,57 @@
+import React from 'react';
+
+class ImageDisplay extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      imageUrl: '',
+    };
+  }
+
+  componentDidMount() {
+    this.fetchRandomImage();
+  }
+
+  fetchRandomImage = () => {
+    fetch('https://picsum.photos/200/300')
+      .then(response => {
+        this.setState({ imageUrl: response.url });
+      })
+      .catch(error => {
+        console.log('Error fetching image:', error);
+      });
+  };
+
+  handleShare = () => {
+    const { imageUrl } = this.state;
+    const shareText = 'Check out this random image!';
+
+    // Share on Facebook
+    window.open(
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(shareText)}`
+    );
+
+    // Share on Twitter
+    window.open(
+      `https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(shareText)}`
+    );
+
+    // Share on WhatsApp
+    window.open(
+      `whatsapp://send?text=${encodeURIComponent(`${shareText} ${window.location.href}`)}`
+    );
+  };
+
+  render() {
+    const { imageUrl } = this.state;
+
+    return (
+      <div>
+        <img src={imageUrl} alt="Random" />
+        <button onClick={this.handleShare}>Share</button>
+      </div>
+    );
+  }
+}
+
+export default ImageDisplay;
